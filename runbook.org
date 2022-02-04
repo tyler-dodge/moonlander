@@ -1,0 +1,23 @@
+* Setup  :PTY:
+
+#+BEGIN_SRC compile-queue
+  cd {{project_root}}
+  qmk setup zsa/qmk_firmware -b firmware20
+  ln -s "$(pwd)/lib/compilation_database.py" "$HOME/qmk_firmware/lib/python/qmk/cli/generate/compilation_database.py"
+  echo from . import compilation_database >> "$HOME/qmk_firmware/lib/python/qmk/cli/generate/__init__.py"
+  ln -s "$(pwd)" ~/qmk_firmware/keyboards/moonlander/keymaps/decest
+  qmk generate-compilation-database -kb moonlander -km decest
+#+END_SRC
+
+
+* Compile
+
+#+BEGIN_SRC compile-queue
+#+END_SRC
+
+#+BEGIN_SRC compile-queue
+  cd "$HOME/qmk_firmware"
+  gmake moonlander:decest
+  mkdir -p "{{project_root}}build"
+  cp "$HOME/qmk_firmware/moonlander_decest.bin" "{{project_root}}build/layout.bin"
+#+END_SRC

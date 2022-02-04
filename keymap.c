@@ -1,4 +1,5 @@
 #include QMK_KEYBOARD_H
+#include "moonlander.h"
 #include "version.h"
 #include "keymap_german.h"
 #include "keymap_nordic.h"
@@ -54,7 +55,6 @@ enum custom_keycodes {
   HSV_86_255_128,
   HSV_172_255_255,
   ST_MACRO_0,
-  ST_MACRO_1,
 };
 
 
@@ -69,8 +69,8 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
     KC_EQUAL,       KC_F1,          KC_F2,          KC_F3,          KC_F4,          KC_F5,          TD(DANCE_0),                                    KC_F12,         KC_F6,          KC_F7,          KC_F8,          KC_F9,          KC_F10,         KC_F11,         
     KC_UNDS,        KC_SCOLON,      KC_COMMA,       KC_DOT,         KC_P,           KC_Y,           TG(1),                                          OSM(MOD_LCTL),  KC_F,           KC_G,           KC_C,           KC_R,           KC_L,           KC_BSLASH,      
     OSM(MOD_LCTL),  KC_A,           KC_O,           KC_E,           KC_U,           KC_I,           KC_TRANSPARENT,                                                                 KC_MEH,         KC_D,           KC_H,           KC_T,           KC_N,           KC_S,           KC_QUOTE,       
-    OSM(MOD_LSFT),  KC_SLASH,       KC_Q,           KC_J,           KC_K,           KC_X,                                           KC_B,           KC_M,           KC_W,           KC_V,           KC_Z,           ST_MACRO_0,     
-    OSL(1),         KC_AMPR,        KC_LALT,        KC_AT,          KC_MINUS,       TD(DANCE_1),                                                                                                    LCTL(KC_G),     KC_UP,          KC_DOWN,        KC_LCBR,        KC_RCBR,        ST_MACRO_1,     
+    OSM(MOD_LSFT),  KC_SLASH,       KC_Q,           KC_J,           KC_K,           KC_X,                                           KC_B,           KC_M,           KC_W,           KC_V,           KC_Z,           OSL(1),         
+    OSL(1),         KC_AMPR,        KC_LALT,        KC_AT,          KC_MINUS,       TD(DANCE_1),                                                                                                    LCTL(KC_G),     KC_UP,          KC_DOWN,        KC_LCBR,        KC_RCBR,        ST_MACRO_0,     
     KC_SPACE,       KC_BSPACE,      OSM(MOD_LGUI),                  KC_LALT,        KC_TAB,         KC_ENTER
   ),
   [1] = LAYOUT_moonlander(
@@ -101,6 +101,7 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
 
 extern bool g_suspend_state;
 extern rgb_config_t rgb_matrix_config;
+extern bool mcp23018_leds[3];
 
 void keyboard_post_init_user(void) {
   rgb_matrix_enable();
@@ -154,17 +155,17 @@ void rgb_matrix_indicators_user(void) {
       rgb_matrix_set_color_all(0, 0, 0);
     break;
   }
+  const uint8_t modifiers = get_mods() ^ get_oneshot_mods();
+
+  ML_LED_1((modifiers & MOD_BIT(KC_LCTRL)) != 0);
+  ML_LED_2((modifiers & MOD_BIT(KC_LSHIFT)) != 0);
+  ML_LED_3((modifiers & MOD_BIT(KC_LCMD)) != 0);
+  ML_LED_4((modifiers & MOD_BIT(KC_LALT)) != 0);
 }
 
 bool process_record_user(uint16_t keycode, keyrecord_t *record) {
   switch (keycode) {
     case ST_MACRO_0:
-    if (record->event.pressed) {
-      SEND_STRING(SS_LCTL(SS_TAP(X_X)) SS_DELAY(100) SS_LCTL(SS_TAP(X_S)));
-
-    }
-    break;
-    case ST_MACRO_1:
     if (record->event.pressed) {
       SEND_STRING(SS_LCTL(SS_TAP(X_X)) SS_DELAY(100) SS_LCTL(SS_TAP(X_X)));
 
@@ -339,4 +340,3 @@ qk_tap_dance_action_t tap_dance_actions[] = {
         [DANCE_1] = ACTION_TAP_DANCE_FN_ADVANCED(on_dance_1, dance_1_finished, dance_1_reset),
         [DANCE_2] = ACTION_TAP_DANCE_FN_ADVANCED(on_dance_2, dance_2_finished, dance_2_reset),
 };
-
