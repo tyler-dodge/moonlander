@@ -65,11 +65,11 @@ enum tap_dance_codes {
 const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
   [0] = LAYOUT_moonlander(
     KC_EQUAL,       KC_F1,          KC_F2,          KC_F3,          KC_F4,          KC_F5,          TD(DANCE_0),                                    KC_F12,         KC_F6,          KC_F7,          KC_F8,          KC_F9,          KC_F10,         KC_F11,         
-    KC_UNDS,        KC_SCOLON,      KC_COMMA,       KC_DOT,         KC_P,           KC_Y,           TG(2),                                          OSM(MOD_LCTL),  KC_F,           KC_G,           KC_C,           KC_R,           KC_L,           KC_BSLASH,      
-    OSM(MOD_LCTL),  KC_A,           KC_O,           KC_E,           KC_U,           KC_I,           KC_ESCAPE,                                                                      TT(1),          KC_D,           KC_H,           KC_T,           KC_N,           KC_S,           KC_QUOTE,       
+    KC_UNDS,        KC_SCOLON,      KC_COMMA,       KC_DOT,         KC_P,           KC_Y,           TG(2),                                          KC_TRANSPARENT, KC_F,           KC_G,           KC_C,           KC_R,           KC_L,           KC_BSLASH,      
+    OSM(MOD_LCTL),  KC_A,           KC_O,           KC_E,           KC_U,           KC_I,           KC_ESCAPE,                                                                      KC_ESCAPE,      KC_D,           KC_H,           KC_T,           KC_N,           KC_S,           KC_QUOTE,       
     OSM(MOD_LSFT),  KC_SLASH,       KC_Q,           KC_J,           KC_K,           KC_X,                                           KC_B,           KC_M,           KC_W,           KC_V,           KC_Z,           TG(2),          
-    OSL(2),         KC_AMPR,        KC_LALT,        KC_AT,          KC_MINUS,       RESET_MODIFIERS,                                                                                                     RESET_MODIFIERS,     KC_UP,          KC_DOWN,        KC_LCBR,        KC_RCBR,        ST_MACRO_1,     
-    KC_SPACE,       KC_BSPACE,      OSM(MOD_LGUI),                  KC_LALT,        KC_TAB,         KC_ENTER
+    OSL(2),         KC_AMPR,        KC_LALT,        KC_AT,          KC_MINUS,       ST_MACRO_0,                                                                                                     RESET_MODIFIERS,     KC_UP,          KC_DOWN,        KC_LCBR,        KC_RCBR,        ST_MACRO_1,     
+    KC_SPACE,       KC_BSPACE,      KC_LGUI,                        KC_LALT,        KC_TAB,         KC_ENTER
   ),
   [1] = LAYOUT_moonlander(
     KC_TRANSPARENT, LCTL(KC_1),     LCTL(KC_2),     LCTL(KC_3),     LCTL(KC_4),     LCTL(KC_5),     LCTL(KC_6),                                     KC_TRANSPARENT, LCTL(KC_6),     LCTL(KC_7),     LCTL(KC_8),     LCTL(KC_9),     LCTL(KC_0),     KC_TRANSPARENT, 
@@ -80,8 +80,8 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
     KC_TRANSPARENT, KC_TRANSPARENT, KC_TRANSPARENT,                 KC_TRANSPARENT, KC_TRANSPARENT, LCTL(KC_ENTER)
   ),
   [2] = LAYOUT_moonlander(
-    KC_ESCAPE,      KC_F1,          KC_F2,          KC_F3,          KC_F4,          KC_F5,          TO(3),                                          KC_TRANSPARENT, KC_F6,          KC_F7,          KC_F8,          KC_F9,          KC_F10,         KC_F11,         
-    KC_DELETE,      KC_EXLM,        KC_AT,          KC_LCBR,        KC_RCBR,        KC_PIPE,        KC_TRANSPARENT,                                 KC_TRANSPARENT, KC_UP,          KC_7,           KC_8,           KC_9,           KC_ASTR,        KC_F12,         
+    TOGGLE_LAYER_COLOR,KC_F1,          KC_F2,          KC_F3,          KC_F4,          KC_F5,          TO(3),                                          KC_TRANSPARENT, KC_F6,          KC_F7,          KC_F8,          KC_F9,          KC_F10,         KC_F11,         
+    KC_DELETE,      KC_EXLM,        KC_AT,          KC_LCBR,        KC_RCBR,        KC_PIPE,        KC_TRANSPARENT,                                 TO(1),          KC_UP,          KC_7,           KC_8,           KC_9,           KC_ASTR,        KC_F12,         
     KC_TRANSPARENT, KC_HASH,        KC_DLR,         KC_LPRN,        KC_RPRN,        KC_GRAVE,       KC_TRANSPARENT,                                                                 KC_LABK,        KC_RABK,        KC_4,           KC_5,           KC_6,           KC_KP_PLUS,     KC_TRANSPARENT, 
     KC_TRANSPARENT, KC_PERC,        KC_CIRC,        KC_LBRACKET,    KC_RBRACKET,    KC_TILD,                                        KC_SCOLON,      KC_1,           KC_2,           KC_3,           KC_BSLASH,      KC_TRANSPARENT, 
     KC_TRANSPARENT, WEBUSB_PAIR,    KC_TRANSPARENT, KC_COMMA,       KC_DOT,         KC_TRANSPARENT,                                                                                                 KC_TRANSPARENT, KC_TRANSPARENT, KC_DOT,         KC_0,           KC_EQUAL,       KC_TRANSPARENT, 
@@ -165,13 +165,13 @@ bool process_record_user(uint16_t keycode, keyrecord_t *record) {
   switch (keycode) {
     case ST_MACRO_0:
     if (record->event.pressed) {
-      SEND_STRING(SS_LCTL(SS_TAP(X_X)) SS_DELAY(100) SS_LCTL(SS_TAP(X_X)));
+      SEND_STRING(SS_TAP(X_R) SS_DELAY(100) SS_TAP(X_E) SS_DELAY(100) SS_TAP(X_S) SS_DELAY(100) SS_TAP(X_E) SS_DELAY(100) SS_TAP(X_T));
 
     }
     break;
     case ST_MACRO_1:
     if (record->event.pressed) {
-      SEND_STRING(SS_LCTL(SS_TAP(X_X)) SS_DELAY(100) SS_LCTL(SS_TAP(X_S)));
+      SEND_STRING(SS_LCTL(SS_TAP(X_X)) SS_DELAY(100) SS_LCTL(SS_TAP(X_X)));
 
     }
     break;
@@ -179,7 +179,7 @@ bool process_record_user(uint16_t keycode, keyrecord_t *record) {
     del_oneshot_mods(~0);
     layer_move(0);
     break;
-  case RGB_SLD:
+    case RGB_SLD:
       if (record->event.pressed) {
         rgblight_mode(1);
       }
