@@ -1,13 +1,26 @@
 * Setup  :PTY:
 
 #+BEGIN_SRC compile-queue
-  cd {{project_root}}
-  qmk setup zsa/qmk_firmware -b firmware20
-  ln -s "$(pwd)/lib/compilation_database.py" "$HOME/qmk_firmware/lib/python/qmk/cli/generate/compilation_database.py"
+cd {{project_root}}
+qmk setup zsa/qmk_firmware -b firmware20
+ln -s "$(pwd)/lib/compilation_database.py" "$HOME/qmk_firmware/lib/python/qmk/cli/generate/compilation_database.py"
   echo from . import compilation_database >> "$HOME/qmk_firmware/lib/python/qmk/cli/generate/__init__.py"
   ln -s "$(pwd)" ~/qmk_firmware/keyboards/moonlander/keymaps/decest
   qmk generate-compilation-database -kb moonlander -km decest
 #+END_SRC
+
+* Install QMK :PTY:
+
+
+#+BEGIN_SRC compile-queue
+set -o errexit
+set -o pipefail
+set -o nounset
+cd {{project_root}}
+sh ~/qmk_firmware/util/qmk_install.sh 
+
+#+END_SRC
+
 
 
 * Compile
@@ -41,4 +54,15 @@
 
 #+RESULTS:
 : 738a4ad4-2960-2cc4-2e63-3e676cd4daba
+
+
+* Flash Firmware
+
+#+BEGIN_SRC compile-queue
+set -o errexit
+set -o pipefail
+set -o nounset
+cd {{project_root}}
+wally-cli build/layout.bin
+#+END_SRC
 
